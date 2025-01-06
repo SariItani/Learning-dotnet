@@ -1,12 +1,24 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace MvcMovie.Models;
 
 public class Movie
 {
     public int Id { get; set; }
-    public string? Title { get; set; } // The question mark (?) is a nullable annotation. It's used to indicate that the Title property can be null.
-    [DataType(DataType.Date)] // The DataType attribute specifies the type of the data (Date). With this attribute, the user is able to pick a date from a calendar, but no specific time annotations... later see in DateTimeAnnotations.
+    
+    [StringLength(60, MinimumLength = 3), Required]
+    public string? Title { get; set; }
+    
+    [Display(Name = "Release Date"), DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
     public DateTime ReleaseDate { get; set; }
-    public string? Genre { get; set; }
+    
+    [Range(1, 100), DataType(DataType.Currency), Column(TypeName = "decimal(18, 2)")]
     public decimal Price { get; set; }
+    
+    [RegularExpression(@"^[A-Z]+[a-zA-Z\s]*$"), StringLength(30), Required]
+    public string? Genre { get; set; }
+    
+    [RegularExpression(@"^[A-Z]+[a-zA-Z0-9""'\s-]*$"), StringLength(5), Required]
+    public string? Rating { get; set; }
 }
